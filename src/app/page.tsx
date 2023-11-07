@@ -17,7 +17,11 @@ const formatNumber = (number: number) => {
 export default function Home() {
   const [certsIssued, setCertsIssued] = useState(0);
   const [domains, setDomains] = useState<{ domain: string; top: number; left: number }[]>([]);
-  const { lastMessage } = useWebSocket('wss://certstream.calidog.io');
+  const { lastMessage } = useWebSocket('wss://certstream.calidog.io', {
+    reconnectAttempts: Infinity,
+    reconnectInterval: 3000,
+    shouldReconnect: () => true,
+  });
 
   useEffect(() => {
     const handleNewDomain = (domain: string) => {
